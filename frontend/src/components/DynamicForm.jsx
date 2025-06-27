@@ -154,10 +154,10 @@ export default function DynamicForm({ functionConfig, onSuccess, onCancel, prefi
           } else if (key === 'teacher' && item[key]?.id) {
             setValue('teacherId', item[key].id)
             return
-          } else if (key === 'student' && item[key]?.id) {
+          } else if (key === 'studentData' && item[key]?.id) {
             setValue('studentId', item[key].id)
             return
-          } else if (key === 'course' && item[key]?.id) {
+          } else if (key === 'courseData' && item[key]?.id) {
             setValue('courseId', item[key].id)
             return
           }

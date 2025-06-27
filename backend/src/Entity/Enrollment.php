@@ -44,8 +44,7 @@ class Enrollment
     #[Assert\Range(
         min: 0,
         max: 20,
-        minMessage: 'La note doit être au minimum {{ limit }}',
-        maxMessage: 'La note doit être au maximum {{ limit }}'
+        notInRangeMessage: 'La note doit être comprise entre {{ min }} et {{ max }}'
     )]
     #[Groups(['enrollment:read', 'enrollment:write'])]
     private ?float $grade = null;
