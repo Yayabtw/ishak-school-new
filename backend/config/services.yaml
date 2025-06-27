@@ -1,0 +1,21 @@
+# Configuration des services pour Ishak'School
+parameters:
+
+services:
+    # Configuration par défaut pour les services dans ce fichier
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Rendre tous les services dans src/ disponibles pour l'injection de dépendance
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Contrôleurs comme services
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments'] 

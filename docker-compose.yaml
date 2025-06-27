@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Service NGINX - Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: ishak_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - react
+      - symfony
+    networks:
+      - ishak_network
+    restart: unless-stopped
+
+  # Service React - Frontend
+  react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ishak_react
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost/api
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - ishak_network
+    restart: unless-stopped
+
+  # Service Symfony - Backend API
+  symfony:
+    image: webdevops/php-nginx:8.2-alpine
+    container_name: ishak_symfony
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/app
+    environment:
+      - APP_ENV=dev
+      - DATABASE_URL=mysql://ishak_user:ishak_password@mariadb:3306/ishak_db
+      - WEB_DOCUMENT_ROOT=/app/public
+    depends_on:
+      - mariadb
+    networks:
+      - ishak_network
+    restart: unless-stopped
+
+  # Service MariaDB - Base de données
+  mariadb:
+    image: mariadb:10.9
+    container_name: ishak_mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=ishak_db
+      - MYSQL_USER=ishak_user
+      - MYSQL_PASSWORD=ishak_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - ishak_network
+    restart: unless-stopped
+
+  # Service PHPMyAdmin - Gestionnaire de base de données
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: ishak_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_USER=root
+      - PMA_PASSWORD=root_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    depends_on:
+      - mariadb
+    networks:
+      - ishak_network
+    restart: unless-stopped
+
+# Volumes persistants
+volumes:
+  mariadb_data:
+    driver: local
+
+# Réseau pour la communication entre conteneurs
+networks:
+  ishak_network:
+    driver: bridge
