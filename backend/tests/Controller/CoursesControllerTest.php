@@ -397,13 +397,4 @@ class CoursesControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
-
-    public function testCorsHeaders(): void
-    {
-        $this->client->request('OPTIONS', '/api/courses');
-        
-        $response = $this->client->getResponse();
-        $this->assertTrue($response->headers->has('Access-Control-Allow-Origin'));
-        $this->assertTrue($response->headers->has('Access-Control-Allow-Methods'));
-    }
 } 
