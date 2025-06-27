@@ -160,10 +160,10 @@ Le projet gère 4 entités principales :
 
 ## 📝 Roadmap
 
-- [ ] ✅ Environnement Docker complet
-- [ ] Backend Symfony avec entités
-- [ ] Frontend React avec interface dynamique
-- [ ] Tests unitaires et d'intégration
+- [✅] Environnement Docker complet
+- [✅] Backend Symfony avec entités
+- [✅] Frontend React avec interface dynamique
+- [✅] Tests unitaires et d'intégration
 - [ ] CI/CD avec GitHub Actions
 
 ## 🚨 Dépannage
